@@ -1,7 +1,7 @@
 import pprint
 import logging
 import shared
-import coloredlogs
+import coloredlogs  # doesn't want to install on system but works in virtual env
 from db_setup import setup_CDV
 
 logger = logging.getLogger(__name__)
