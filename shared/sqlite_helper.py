@@ -1,8 +1,9 @@
 import sqlite3
 
-
+## create a database connection to a SQLite database
+# params:
+#   db_file: database file
 def sqlite_create_connection(db_file):
-    """create a database connection to a SQLite database"""
     conn = None
     try:
         conn = sqlite3.connect(db_file)
@@ -13,12 +14,11 @@ def sqlite_create_connection(db_file):
     return conn
 
 
+## create a table from the create_table_sql statement
+# params:
+#   conn: Connection object
+#   create_table_sql: a CREATE TABLE statement
 def sqlite_create_table(conn, create_table_sql):
-    """create a table from the create_table_sql statement
-    :param conn: Connection object
-    :param create_table_sql: a CREATE TABLE statement
-    :return:
-    """
     try:
         c = conn.cursor()
         c.execute(create_table_sql)
@@ -26,13 +26,12 @@ def sqlite_create_table(conn, create_table_sql):
         print(e)
 
 
+## insert data into a table
+# params:
+#   conn: Connection object
+#   insert_data_sql: a INSERT INTO statement
+#   args: data to be inserted
 def sqlite_insert_data_many(conn, insert_data_sql, args):
-    """insert data into a table
-    :param conn: Connection object
-    :param insert_data_sql: a INSERT INTO statement
-    :param args: a list of tuples
-    :return:
-    """
     try:
         c = conn.cursor()
         c.executemany(insert_data_sql, args)
@@ -41,12 +40,11 @@ def sqlite_insert_data_many(conn, insert_data_sql, args):
         print(e)
 
 
+## insert data into a table
+# params:
+#   conn: Connection object
+#   insert_data_sql: a INSERT INTO statement
 def sqlite_select_data(conn, select_data_sql):
-    """select data from a table
-    :param conn: Connection object
-    :param select_data_sql: a SELECT statement
-    :return:
-    """
     try:
         c = conn.cursor()
         c.row_factory = sqlite3.Row
