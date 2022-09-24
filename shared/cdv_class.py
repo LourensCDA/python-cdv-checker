@@ -21,16 +21,20 @@ class cdv_class:
         ## account default to 4 if invalid account type is provided
         ## current account
         acc_type_no = (
-            1 if self.banking_details["account_type"] in ("cheque", "current") else 4
+            1
+            if self.banking_details["account_type"].lower() in ("cheque", "current")
+            else 4
         )
         ## savings account
         acc_type_no = (
-            2 if self.banking_details["account_type"] in ("savings") else acc_type_no
+            2
+            if self.banking_details["account_type"].lower() in ("savings")
+            else acc_type_no
         )
         ## transmission account
         acc_type_no = (
             3
-            if self.banking_details["account_type"] in ("transmission")
+            if self.banking_details["account_type"].lower() in ("transmission")
             else acc_type_no
         )
         self.banking_details["account_type_no"] = acc_type_no

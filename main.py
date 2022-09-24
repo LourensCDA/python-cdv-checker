@@ -1,10 +1,18 @@
 import pprint
 import logging
 import shared
+import verboselogs
 import coloredlogs  # doesn't want to install on system but works in virtual env
 from db_setup import setup_CDV
 
-logger = logging.getLogger(__name__)
+# initialise logging
+# using package verboselogs https://pypi.org/project/verboselogs/
+logger = verboselogs.VerboseLogger("verbose")
+logger.addHandler(logging.StreamHandler())
+logger.setLevel(logging.DEBUG)
+
+# package that provides colors on loggin
+# https://pypi.org/project/coloredlogs/
 coloredlogs.install(level=logging.DEBUG, logger=logger)
 
 sql_db = setup_CDV()
@@ -12,16 +20,17 @@ sql_db = setup_CDV()
 banking_details = {
     "account_number": "123456789",
     "branch_code": "250655",
-    "account_type": "Savings2",
+    "account_type": "Savings",
 }
 
+# initialise class for cdv check
 cdv = shared.cdv_class(sql_db, **banking_details)
 
 # check if branch exists
 branch = cdv.return_branch()
 if branch:
-    logger.info("Branch exists")
-    logger.debug(
+    logger.success("Branch exists")
+    logger.info(
         f"\nBranch details\nBank: {branch['member_name']} \nBranch: {branch['branch_name']}\nClosed: {branch['Closed']}",
     )
 else:
@@ -31,6 +40,6 @@ else:
 if cdv.banking_details["account_type_no"] == 4:
     logger.error("Account type: Invalid")
 else:
-    logger.info("Account type: Valid")
+    logger.success("Account type: Valid")
 
 pprint.pprint(cdv.banking_details)
