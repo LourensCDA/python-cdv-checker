@@ -38,7 +38,7 @@ To run:
 docker run -it python-cdv
 ```
 
-## Waht am I using?
+## What am I using?
 
 - Python 3.10
 - SQLite3
