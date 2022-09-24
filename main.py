@@ -23,7 +23,9 @@ banking_details = {
     "account_type": "Savings",
 }
 
-logger.debug(f"\nOriginal details provided: {banking_details}")
+logger.info(
+    f"\nOriginal details provided:\n{pprint.pformat(banking_details, indent=4, width=1)}\n"
+)
 
 # initialise class for cdv check
 cdv = shared.cdv_class(sql_db, **banking_details)
@@ -33,7 +35,7 @@ branch = cdv.return_branch()
 if branch:
     logger.success("Branch exists")
     logger.info(
-        f"\nBranch details\nBank: {branch['member_name']} \nBranch: {branch['branch_name']}\nClosed: {branch['Closed']}",
+        f"\nBranch details\n{pprint.pformat(branch, indent=4, width=1)}\n",
     )
 else:
     logger.error("Branch does not exist")
@@ -46,4 +48,8 @@ else:
 
 # check if account number is valid
 response = cdv.cdv_check()
-pprint.pprint(response)
+if response["success"]:
+    print(f"Account number: Valid\n{response}")
+else:
+    print(f"Account number: Invalid\n{response}")
+print(f"Processed details:\n{pprint.pformat(cdv.banking_details, indent=4, width=1)}")
