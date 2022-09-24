@@ -1,4 +1,4 @@
-Project to run a bank account algorithm check (CDV).
+Project to run a bank account algorithm check (CDV) based on Bankserv specification.
 
 ## Pipenv
 
