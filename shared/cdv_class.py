@@ -24,6 +24,9 @@ class cdv_class:
             .replace("-", "")
             .strip()
         )
+        self.banking_details["account_number_length"] = len(
+            self.banking_details["account_number"]
+        )
 
     ## validate account type number
     def set_account_type_number(self):
@@ -56,6 +59,17 @@ class cdv_class:
         else:
             return None
 
+    ## standard bank SA checks
+    def standard_bank_checks(self, branch_code):
+        outcome = None
+        if (
+            self.banking_details["account_number_length"] == 11
+            and self.banking_details["account_number"][:1] != "0"
+            and self.banking_details["branch_code"] != branch_code
+        ):
+            return {"success": False, "message": "Account number must start with 0"}
+        return outcome
+
     ## return cdv pass or fail
     def cdv_check(self):
         output = {"success": None, "message": "Could not validate account"}
@@ -79,4 +93,14 @@ class cdv_class:
         # if account number contains non numeric characters then fail
         if not self.banking_details["account_number"].isnumeric():
             return {"success": False, "message": "Account number not numeric"}
+        # standard bank checks
+        if branch["member_name"].lower() == "standard bank":
+            output = (
+                self.standard_bank_checks("051001")
+                if branch["country"].lower() == "south africa"
+                else self.standard_bank_checks("087373")
+            )
+            if output:
+                return output
+
         return output
