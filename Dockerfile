@@ -14,4 +14,4 @@ RUN pip install pipenv && pipenv install --dev --system --deploy
 WORKDIR /src
 COPY . /src
 
-CMD ["python", "db_setup.py"]
+CMD ["python", "main.py"]
