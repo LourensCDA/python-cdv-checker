@@ -79,10 +79,25 @@ class cdv_class:
         if (
             branch_code == "000000"
             and self.banking_details["account_number_length"] == 13
-            and self.banking_details["account_number"][3] not in (2, 4)
+            and self.banking_details["account_number"][1] not in (2, 4)
         ):
             return {"success": False, "message": "Account number invalid"}
         return outcome
+
+    ## cdv function
+    def cdv_algorythm(self, acc_no, wheight, fudge, mod):
+        test_var = 0
+        for i in range(0, 11):
+            conv_weight = wheight[i * 2 :: 2].strip()
+            if not conv_weight.isnumeric():
+                ham = ord(conv_weight) - 65 + 10
+            else:
+                ham = int(conv_weight)
+            test_var += int(acc_no[i]) * ham
+
+        test_var += int(fudge)
+
+        return test_var % int(mod)
 
     ## return cdv pass or fail
     def cdv_check(self):
@@ -157,4 +172,13 @@ class cdv_class:
         if not wf or wf["EFT_CDV_AccInd"] == 0:
             return output
         # run initial cdv check
+        if len(self.banking_details["account_number_fmt"]) == 11:
+            print(
+                self.cdv_algorythm(
+                    self.banking_details["account_number_fmt"],
+                    wf["EFT_CDV_Weight"],
+                    wf["EFT_CDV_Fudge"],
+                    wf["EFT_CDV_Mod"],
+                )
+            )
         return output
