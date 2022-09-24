@@ -136,7 +136,7 @@ class cdv_class:
             return {"success": False, "message": "Account number must start with 6"}
         # check for habib bank
         if (
-            self.banking_details["member_name"].upper() == "HABIB OVERSEAS BANK LIMITED"
+            branch["member_name"].upper() == "HABIB OVERSEAS BANK LIMITED"
             and self.banking_details["account_number_length"] == 11
             and self.banking_details["account_number"][:1] != "0"
         ):
