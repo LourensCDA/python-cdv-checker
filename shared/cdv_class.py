@@ -95,6 +95,7 @@ class cdv_class:
             return {"success": False, "message": "Invalid account type"}
         # return branch details
         branch = self.return_branch()
+        self.banking_details["branch_details"] = branch
         # if branch does not exist then fail
         if not branch:
             return {"success": False, "message": "Branch does not exist"}
@@ -155,4 +156,5 @@ class cdv_class:
         # if no weighting factor return default
         if not wf or wf["EFT_CDV_AccInd"] == 0:
             return output
+        # run initial cdv check
         return output
