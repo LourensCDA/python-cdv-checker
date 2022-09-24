@@ -88,7 +88,7 @@ class cdv_class:
     def cdv_algorythm(self, acc_no, wheight, fudge, mod):
         test_var = 0
         for i in range(0, 11):
-            conv_weight = wheight[i * 2 :: 2].strip()
+            conv_weight = wheight[i * 2 : (i * 2) + 2].strip()
             if not conv_weight.isnumeric():
                 ham = ord(conv_weight) - 65 + 10
             else:
