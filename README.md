@@ -37,3 +37,8 @@ To run:
 ```ps
 docker run -it python-cdv
 ```
+
+## Waht am I using?
+
+- Python 3.10
+- SQLite3
