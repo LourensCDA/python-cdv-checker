@@ -15,6 +15,15 @@ class cdv_class:
         self.db_file = db_file
         self.banking_details = banking_details
         self.set_account_type_number()
+        self.banking_details["branch_code"] = (
+            "000000" + self.banking_details["branch_code"]
+        )[-6:]
+        self.banking_details["account_number"] = (
+            self.banking_details["account_number"]
+            .replace(" ", "")
+            .replace("-", "")
+            .strip()
+        )
 
     ## validate account type number
     def set_account_type_number(self):
@@ -46,3 +55,28 @@ class cdv_class:
             return sqlite_select_data(self.db_file, sql)[0]
         else:
             return None
+
+    ## return cdv pass or fail
+    def cdv_check(self):
+        output = {"success": None, "message": "Could not validate account"}
+        # exclude branch codes not catered for
+        if self.banking_details["branch_code"] in ("678910", "679000"):
+            return {"success": True, "message": "Unable to validate this branch"}
+        # Invalid account type
+        if self.banking_details["account_type_no"] == 4:
+            return {"success": False, "message": "Invalid account type"}
+        # return branch details
+        branch = self.return_branch()
+        # if branch does not exist then fail
+        if not branch:
+            return {"success": False, "message": "Branch does not exist"}
+        # if branch closed then fail
+        if branch["Closed"] == "Y":
+            return {"success": False, "message": "Branch closed"}
+        # if account number is empty then fail
+        if not self.banking_details["account_number"]:
+            return {"success": False, "message": "Account number not provided"}
+        # if account number contains non numeric characters then fail
+        if not self.banking_details["account_number"].isnumeric():
+            return {"success": False, "message": "Account number not numeric"}
+        return output

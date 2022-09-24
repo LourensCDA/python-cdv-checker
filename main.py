@@ -19,9 +19,11 @@ sql_db = setup_CDV()
 
 banking_details = {
     "account_number": "123456789",
-    "branch_code": "250655",
+    "branch_code": "632005",
     "account_type": "Savings",
 }
+
+logger.debug(f"\nOriginal details provided: {banking_details}")
 
 # initialise class for cdv check
 cdv = shared.cdv_class(sql_db, **banking_details)
@@ -42,4 +44,6 @@ if cdv.banking_details["account_type_no"] == 4:
 else:
     logger.success("Account type: Valid")
 
-pprint.pprint(cdv.banking_details)
+# check if account number is valid
+response = cdv.cdv_check()
+pprint.pprint(response)
